@@ -1,0 +1,21 @@
+{
+    "name": "ebolution/laravel-base-crud-module",
+    "description": "Provides a scaffold to create CRUD modules",
+    "minimum-stability": "stable",
+    "version": "1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Avanzed Cloud Develop, S.L.",
+            "email": "desarrollo@ebolution.com"
+        }
+    ],
+    "require": {
+        "ebolution/laravel-core": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ebolution\\BaseCrudModule\\": "src/"
+        }
+    }
+}
