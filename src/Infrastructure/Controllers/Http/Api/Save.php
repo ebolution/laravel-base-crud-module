@@ -9,23 +9,23 @@
 
 namespace Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Api;
 
-use Ebolution\BaseCrudModule\Domain\Contracts\ControllerRequestByIdInterface;
+use Ebolution\BaseCrudModule\Domain\Contracts\ControllerSaveRequestInterface;
 use Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Controller;
+use Ebolution\BaseCrudModule\Infrastructure\Request\SaveRequest;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class Delete extends Controller
+class Save extends Controller
 {
     public function __construct(
-        private readonly ControllerRequestByIdInterface $controller
+        private readonly ControllerSaveRequestInterface $controller
     ) {}
 
-    public function __invoke(Request $request, $id): Response|Application|ResponseFactory
+    public function __invoke(SaveRequest $request): Response|Application|ResponseFactory
     {
-        $this->controller->__invoke($request, $id);
+        $newEntity = $this->controller->__invoke($request);
 
-        return response('', 204);
+        return response($newEntity, 200);
     }
 }

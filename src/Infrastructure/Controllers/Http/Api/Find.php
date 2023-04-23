@@ -16,7 +16,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class Delete extends Controller
+class Find extends Controller
 {
     public function __construct(
         private readonly ControllerRequestByIdInterface $controller
@@ -24,8 +24,8 @@ class Delete extends Controller
 
     public function __invoke(Request $request, $id): Response|Application|ResponseFactory
     {
-        $this->controller->__invoke($request, $id);
+        $user = $this->controller->__invoke($request, $id);
 
-        return response('', 204);
+        return response($user, 200);
     }
 }

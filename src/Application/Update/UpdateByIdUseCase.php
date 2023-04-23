@@ -2,19 +2,20 @@
 
 namespace Ebolution\BaseCrudModule\Application\Update;
 
-use Exception;
 use Ebolution\BaseCrudModule\Domain\Contracts\RepositoryInterface;
+use Ebolution\BaseCrudModule\Domain\Contracts\UseCases\UpdateInterface;
 use Ebolution\BaseCrudModule\Domain\Exceptions\EntityException;
-use Ebolution\BaseCrudModule\Domain\ValueObjects\Id;
 use Ebolution\BaseCrudModule\Domain\SaveRequest;
+use Ebolution\BaseCrudModule\Domain\ValueObjects\Id;
+use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 
-class UpdateByIdUseCase
+class UpdateByIdUseCase implements UpdateInterface
 {
     const EXCEPTION_MESSAGE = 'Entity not updated';
 
     public function __construct(
-        private RepositoryInterface $repository
+        private readonly RepositoryInterface $repository
     ) {}
 
     /**

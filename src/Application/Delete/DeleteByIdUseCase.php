@@ -3,16 +3,17 @@
 namespace Ebolution\BaseCrudModule\Application\Delete;
 
 use Ebolution\BaseCrudModule\Domain\Contracts\RepositoryInterface;
+use Ebolution\BaseCrudModule\Domain\Contracts\UseCases\DeleteInterface;
 use Ebolution\BaseCrudModule\Domain\Exceptions\EntityException;
 use Ebolution\BaseCrudModule\Domain\ValueObjects\Id;
 use JetBrains\PhpStorm\ArrayShape;
 
-class DeleteByIdUseCase
+class DeleteByIdUseCase implements DeleteInterface
 {
     const EXCEPTION_MESSAGE = 'Entity not deleted';
 
     public function __construct(
-        private RepositoryInterface $repository
+        private readonly RepositoryInterface $repository
     ) {}
 
     /**

@@ -2,10 +2,10 @@
 
 namespace Ebolution\BaseCrudModule\Infrastructure\Request;
 
+use Ebolution\BaseCrudModule\Domain\Exceptions\EntityException;
+use Ebolution\Core\Infrastructure\Helpers\StringHelper;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Ebolution\Core\Infrastructure\Helpers\StringHelper;
-use Ebolution\BaseCrudModule\Domain\Exceptions\EntityException;
 
 class SaveRequest extends FormRequest
 {

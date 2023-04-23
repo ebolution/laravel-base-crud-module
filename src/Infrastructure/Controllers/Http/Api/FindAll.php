@@ -9,23 +9,22 @@
 
 namespace Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Api;
 
-use Ebolution\BaseCrudModule\Domain\Contracts\ControllerRequestByIdInterface;
+use Ebolution\BaseCrudModule\Domain\Contracts\ControllerInterface;
 use Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Controller;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class Delete extends Controller
+class FindAll extends Controller
 {
     public function __construct(
-        private readonly ControllerRequestByIdInterface $controller
+        private readonly ControllerInterface $controller
     ) {}
 
-    public function __invoke(Request $request, $id): Response|Application|ResponseFactory
+    public function __invoke(): Response|Application|ResponseFactory
     {
-        $this->controller->__invoke($request, $id);
+        $response = $this->controller->__invoke();
 
-        return response('', 204);
+        return response($response, 200);
     }
 }

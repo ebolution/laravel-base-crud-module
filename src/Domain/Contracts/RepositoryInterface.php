@@ -10,6 +10,6 @@ interface RepositoryInterface
     public function findAll(): array;
     public function findById(Id $id): ?array;
     public function deleteById(Id $id): bool;
-    public function save(SaveRequest $request): ?int;
+    public function create(SaveRequest $request): ?int;
     public function updateById(Id $id, SaveRequest $request): ?int;
 }
