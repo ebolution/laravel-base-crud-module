@@ -24,7 +24,8 @@ class DeleteByIdUseCase implements DeleteInterface
     {
         $response = $this->repository->deleteById(new Id($id));
         if (! $response) {
-            throw new EntityException(static::EXCEPTION_MESSAGE, 500);
+            return (['message' => static::EXCEPTION_MESSAGE, 404]);
+//            throw new EntityException(static::EXCEPTION_MESSAGE, 500);
         }
 
         return [

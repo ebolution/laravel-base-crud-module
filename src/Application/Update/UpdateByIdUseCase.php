@@ -30,7 +30,8 @@ class UpdateByIdUseCase implements UpdateInterface
                 new SaveRequest($request, $date)
             );
         } catch(Exception $e) {
-            throw new EntityException(static::EXCEPTION_MESSAGE, 404);
+            return [static::EXCEPTION_MESSAGE, 500];
+//            throw new EntityException(static::EXCEPTION_MESSAGE, 404);
         }
 
         return [

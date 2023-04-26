@@ -21,9 +21,6 @@ class FindByIdUseCase implements FindByIdInterface
     public function __invoke(int $id): array
     {
         $response = $this->repository->findById(new Id($id));
-        if (! $response) {
-            throw new EntityException(static::EXCEPTION_MESSAGE, 404);
-        }
 
         return $response;
     }
