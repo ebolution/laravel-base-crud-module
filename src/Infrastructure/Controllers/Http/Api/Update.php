@@ -26,7 +26,14 @@ class Update extends Controller
 
     public function __invoke(SaveRequest $request, $id): Response|Application|ResponseFactory
     {
-        $this->validator->load($request);
+        try{
+            $this->validator->load($request);
+        }
+        catch(\Exception $e)
+        {
+            return response( ['data' => $e->getMessage()], 400);
+        }
+
         $object = $this->controller->__invoke($request, $id);
 
         return response(['data' => $object], 200);
