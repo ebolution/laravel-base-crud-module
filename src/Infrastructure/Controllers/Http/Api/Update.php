@@ -10,6 +10,7 @@
 namespace Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Api;
 
 use Ebolution\BaseCrudModule\Domain\Contracts\ControllerRequestByIdInterface;
+use Ebolution\BaseCrudModule\Infrastructure\Contracts\ValidatorLoaderInterface;
 use Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Controller;
 use Ebolution\BaseCrudModule\Infrastructure\Request\SaveRequest as SaveRequest;
 use Illuminate\Contracts\Foundation\Application;
@@ -19,11 +20,13 @@ use Illuminate\Http\Response;
 class Update extends Controller
 {
     public function __construct(
-        private readonly ControllerRequestByIdInterface $controller
+        private readonly ControllerRequestByIdInterface $controller,
+        private readonly ValidatorLoaderInterface $validator
     ) {}
 
     public function __invoke(SaveRequest $request, $id): Response|Application|ResponseFactory
     {
+        $this->validator->load($request);
         $object = $this->controller->__invoke($request, $id);
 
         return response(['data' => $object], 200);

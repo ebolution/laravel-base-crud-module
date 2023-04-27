@@ -24,6 +24,24 @@ class SaveRequest extends FormRequest
         return $this->messages;
     }
 
+    public function load(array $rules, array $messages): void
+    {
+        $this->rules = $rules;
+        $this->messages = $messages;
+
+        $this->revalidate();
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function revalidate()
+    {
+        $this->validator = null;
+        $this->validator = $this->getValidatorInstance();
+        $this->validateResolved();
+    }
+
     /**
      * @throws EntityException
      */
