@@ -26,6 +26,6 @@ class Save extends Controller
     {
         $newEntity = $this->controller->__invoke($request);
 
-        return response($newEntity, 200);
+        return response(['data' => $newEntity], 200);
     }
 }

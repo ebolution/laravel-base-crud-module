@@ -25,6 +25,6 @@ class FindAll extends Controller
     {
         $response = $this->controller->__invoke();
 
-        return response($response, 200);
+        return response(['data' => $response], 200);
     }
 }

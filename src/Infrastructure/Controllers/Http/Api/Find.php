@@ -26,6 +26,6 @@ class Find extends Controller
     {
         $user = $this->controller->__invoke($request, $id);
 
-        return response($user, 200);
+        return response(['data' => $user], 200);
     }
 }

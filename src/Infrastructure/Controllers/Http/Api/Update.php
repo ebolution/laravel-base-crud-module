@@ -26,6 +26,6 @@ class Update extends Controller
     {
         $object = $this->controller->__invoke($request, $id);
 
-        return response($object, 200);
+        return response(['data' => $object], 200);
     }
 }
