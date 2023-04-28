@@ -23,8 +23,12 @@ class FindAll extends Controller
 
     public function __invoke(): Response|Application|ResponseFactory
     {
-        $response = $this->controller->__invoke();
+        try {
+            $response = $this->controller->__invoke();
 
-        return response(['data' => $response], 200);
+            return response(['data' => $response], 200);
+        } catch(\Exception $e) {
+            return response( ['errors' => $e->getMessage()], 400);
+        }
     }
 }

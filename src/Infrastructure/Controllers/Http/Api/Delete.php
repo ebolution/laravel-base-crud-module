@@ -24,8 +24,13 @@ class Delete extends Controller
 
     public function __invoke(Request $request, $id): Response|Application|ResponseFactory
     {
-        $response = $this->controller->__invoke($request, $id);
-        if($response['message'] === 'OK')return response(['data' => 'OK'], 204);
-        else return response(['data' => 'NOT FOUND'], 404);
+        try {
+            $response = $this->controller->__invoke($request, $id);
+            return ($response['message'] === 'OK') ?
+                response(['data' => 'OK'], 204) :
+                response(['data' => 'NOT FOUND'], 404);
+        } catch(\Exception $e) {
+            return response( ['errors' => $e->getMessage()], 400);
+        }
     }
 }

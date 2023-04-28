@@ -2,7 +2,7 @@
     "name": "ebolution/laravel-base-crud-module",
     "description": "Provides a scaffold to create CRUD modules",
     "minimum-stability": "stable",
-    "version": "1.5.1",
+    "version": "1.5.2",
     "license": "MIT",
     "authors": [
         {

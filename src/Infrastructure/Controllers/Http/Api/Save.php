@@ -26,16 +26,13 @@ class Save extends Controller
 
     public function __invoke(SaveRequest $request): Response|Application|ResponseFactory
     {
-        try{
+        try {
             $this->validator->load($request);
-        }
-        catch(\Exception $e)
-        {
-            return response( ['data' => $e->getMessage()], 400);
-        }
+            $newEntity = $this->controller->__invoke($request);
 
-        $newEntity = $this->controller->__invoke($request);
-
-        return response(['data' => $newEntity], 200);
+            return response(['data' => $newEntity], 200);
+        } catch(\Exception $e) {
+            return response( ['errors' => $e->getMessage()], 400);
+        }
     }
 }

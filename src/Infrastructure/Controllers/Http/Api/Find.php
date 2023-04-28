@@ -24,8 +24,12 @@ class Find extends Controller
 
     public function __invoke(Request $request, $id): Response|Application|ResponseFactory
     {
-        $user = $this->controller->__invoke($request, $id);
+        try {
+            $user = $this->controller->__invoke($request, $id);
 
-        return response(['data' => $user], 200);
+            return response(['data' => $user], 200);
+        } catch(\Exception $e) {
+            return response( ['errors' => $e->getMessage()], 400);
+        }
     }
 }
