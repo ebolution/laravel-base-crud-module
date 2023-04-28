@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.3] - 2023-04-28
+### Modified
+- Update LICENSE and README files
+
+## [1.5.2] - 2023-04-28
+### Added
+- Return errors as 'errors' on the response
+
+## [1.5.1] - 2023-04-27
+### Modified
+- Allow modules to override SaveRequest data
+- Add try catch to return error messages if exists
+
 ## [1.5.0] - 2023-04-23
 ### Added
 - All missing classes to provide full support of CRUD operations by extending them
