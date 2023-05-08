@@ -2,6 +2,7 @@
 
 namespace Ebolution\BaseCrudModule\Application\Update;
 
+use Ebolution\BaseCrudModule\Domain\Contracts\RequestDataProcessorInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\RepositoryInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\UseCases\UpdateInterface;
 use Ebolution\BaseCrudModule\Domain\Exceptions\EntityException;
@@ -15,6 +16,7 @@ class UpdateByIdUseCase implements UpdateInterface
     const EXCEPTION_MESSAGE = 'Entity not updated';
 
     public function __construct(
+        private readonly RequestDataProcessorInterface $requestDataProcessor,
         private readonly RepositoryInterface $repository
     ) {}
 
@@ -24,6 +26,7 @@ class UpdateByIdUseCase implements UpdateInterface
     #[ArrayShape(['message' => "string", 'id' => "int|null"])]
     public function __invoke(int $id, array $request, string $date): array
     {
+        $request = $this->requestDataProcessor->__invoke($request);
         try {
             $response = $this->repository->updateById(
                 new Id($id),
@@ -31,7 +34,6 @@ class UpdateByIdUseCase implements UpdateInterface
             );
         } catch(Exception $e) {
             return [static::EXCEPTION_MESSAGE, 500];
-//            throw new EntityException(static::EXCEPTION_MESSAGE, 404);
         }
 
         return [

@@ -2,6 +2,7 @@
 
 namespace Ebolution\BaseCrudModule\Application\Create;
 
+use Ebolution\BaseCrudModule\Domain\Contracts\RequestDataProcessorInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\RepositoryInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\SaveRequestFactoryInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\UseCases\CreateInterface;
@@ -15,6 +16,7 @@ class CreateUseCase implements CreateInterface
     const EXCEPTION_MESSAGE = 'Entity not created';
 
     public function __construct(
+        private readonly RequestDataProcessorInterface $requestDataProcessor,
         private readonly RepositoryInterface $repository,
         private readonly SaveRequestFactoryInterface $factoryInterface
     ) {}
@@ -25,6 +27,7 @@ class CreateUseCase implements CreateInterface
     #[ArrayShape(['message' => "string", 'id' => "int|null"])]
     public function __invoke(array $request, string $date): array
     {
+        $request = $this->requestDataProcessor->__invoke($request);
         $saveRequest = $this->factoryInterface->create($request, $date);
         try {
             $entityId = $this->repository->create($saveRequest);
