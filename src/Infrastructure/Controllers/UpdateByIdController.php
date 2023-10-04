@@ -18,12 +18,15 @@ class UpdateByIdController implements ControllerRequestByIdInterface
 {
     use DateHelper;
 
+    protected bool $only_validated_data = false;
+
     public function __construct(
         private readonly UpdateInterface $useCase
     ) {}
 
     public function __invoke(Request $request, int $id): array
     {
-        return $this->useCase->__invoke($id, $request->all(), $this->getNow());
+        $data = $this->only_validated_data ? $request->validated() : $request->all();
+        return $this->useCase->__invoke($id, $data, $this->getNow());
     }
 }

@@ -19,6 +19,8 @@ class SaveController implements ControllerSaveRequestInterface
 {
     use DateHelper;
 
+    protected bool $only_validated_data = false;
+
     public function __construct(
         private readonly CreateInterface $useCase
     ) {}
@@ -26,6 +28,7 @@ class SaveController implements ControllerSaveRequestInterface
     #[ArrayShape(['message' => "string", 'id' => "\int|null"])]
     public function __invoke(SaveRequest $request): array
     {
-        return $this->useCase->__invoke($request->all(), $this->getNow());
+        $data = $this->only_validated_data ? $request->validated() : $request->all();
+        return $this->useCase->__invoke($data, $this->getNow());
     }
 }
