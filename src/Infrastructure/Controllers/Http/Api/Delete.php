@@ -15,6 +15,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Delete extends Controller
 {
@@ -30,7 +31,8 @@ class Delete extends Controller
                 response(['data' => 'OK'], 204) :
                 response(['data' => 'NOT FOUND'], 404);
         } catch(\Exception $e) {
-            return response( ['errors' => $e->getMessage()], 400);
+            $status_code = $e instanceof HttpException ? $e->getStatusCode() : 400;
+            return response( ['errors' => $e->getMessage()], $status_code);
         }
     }
 }

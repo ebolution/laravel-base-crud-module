@@ -16,6 +16,7 @@ use Ebolution\BaseCrudModule\Infrastructure\Request\SaveRequest as SaveRequest;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Update extends Controller
 {
@@ -32,7 +33,8 @@ class Update extends Controller
 
             return response(['data' => $object], 200);
         } catch(\Exception $e) {
-            return response( ['errors' => $e->getMessage()], 400);
+            $status_code = $e instanceof HttpException ? $e->getStatusCode() : 400;
+            return response( ['errors' => $e->getMessage()], $status_code);
         }
     }
 }
