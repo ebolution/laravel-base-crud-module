@@ -21,17 +21,6 @@ abstract class AbstractEvent
 
     public function __invoke(array $data): void
     {
-        $data = $this->beforeEvent($data);
         $this->emitter->emit($this->name, $data);
-        $this->afterEvent($data);
-    }
-
-    protected function beforeEvent(array $data): array
-    {
-        return $data;
-    }
-
-    protected function afterEvent(array $data): void
-    {
     }
 }
