@@ -2,7 +2,7 @@
 /**
  * @category  Ebolution
  * @package   Ebolution/BaseCrudModule
- * @author    Manuel GARCÍA SOLIPA <manuel.garcia@ebolution.com>
+ * @author    Carlos Cid <carlos.cid@ebolution.com>
  * @copyright 2023 Avanzed Cloud Develop S.L
  * @license   Private - https://www.ebolution.com/
  */
