@@ -11,6 +11,8 @@ namespace Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Api;
 
 use Ebolution\BaseCrudModule\Domain\Contracts\ControllerRequestByIdInterface;
 use Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Controller;
+use Ebolution\BaseCrudModule\Infrastructure\Traits\ErrorFormatter;
+use Ebolution\Core\Domain\Exceptions\CustomException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -19,6 +21,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Delete extends Controller
 {
+    use ErrorFormatter;
+
     public function __construct(
         private readonly ControllerRequestByIdInterface $controller
     ) {}
@@ -28,11 +32,12 @@ class Delete extends Controller
         try {
             $response = $this->controller->__invoke($request, $id);
             return ($response['message'] === 'OK') ?
-                response(['data' => 'OK'], 204) :
-                response(['data' => 'NOT FOUND'], 404);
+                response('', 204) :
+                response($this->formatError(400, 'Unexpected result'), 400);
         } catch(\Exception $e) {
-            $status_code = $e instanceof HttpException ? $e->getStatusCode() : 400;
-            return response( ['errors' => $e->getMessage()], $status_code);
+            $status_code = $e instanceof HttpException ? $e->getStatusCode() :
+                ($e instanceof CustomException ? $e->getCode() : 400);
+            return response($this->formatError($status_code, $e->getMessage()), $status_code);
         }
     }
 }

@@ -20,8 +20,6 @@ class FindByIdUseCase implements FindByIdInterface
      */
     public function __invoke(int $id): array
     {
-        $response = $this->repository->findById(new Id($id));
-
-        return $response;
+        return $this->repository->findById(new Id($id));
     }
 }

@@ -7,6 +7,7 @@ use Ebolution\BaseCrudModule\Domain\Contracts\RequestDataProcessorInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\RepositoryInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\UseCases\UpdateInterface;
 use Ebolution\BaseCrudModule\Domain\Exceptions\EntityException;
+use Ebolution\BaseCrudModule\Domain\Exceptions\EntityNotFoundException;
 use Ebolution\BaseCrudModule\Domain\SaveRequest;
 use Ebolution\BaseCrudModule\Domain\ValueObjects\Id;
 use Exception;
@@ -41,8 +42,11 @@ class UpdateByIdUseCase implements UpdateInterface
             );
 
             $this->emitEvents($this->updated_events, $id, $request);
-        } catch(Exception $e) {
-            return [static::EXCEPTION_MESSAGE, 500];
+        } catch (EntityNotFoundException $e) {
+            throw new EntityException(static::EXCEPTION_MESSAGE, 404);
+        } catch (Exception $e) {
+            //TODO: Log real exception
+            throw new EntityException(static::EXCEPTION_MESSAGE, 500);
         }
 
         return [

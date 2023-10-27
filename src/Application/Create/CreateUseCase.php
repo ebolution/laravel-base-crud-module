@@ -22,7 +22,7 @@ class CreateUseCase implements CreateInterface
         private readonly RequestDataProcessorInterface $requestDataProcessor,
         private readonly RepositoryInterface $repository,
         private readonly SaveRequestFactoryInterface $factoryInterface,
-        private readonly EventEmitterInterface $eventEmitter
+        private readonly EventEmitterInterface $eventEmitter,
     ) {}
 
     /**
@@ -38,7 +38,8 @@ class CreateUseCase implements CreateInterface
 
             $this->emitEvents($this->created_events, $entityId, $request);
         } catch (Exception $e) {
-            return [static::EXCEPTION_MESSAGE, 500];
+            //TODO: Log real exception
+            throw new EntityException(static::EXCEPTION_MESSAGE, 500);
         }
 
         return $this->repository->findById(new Id($entityId));

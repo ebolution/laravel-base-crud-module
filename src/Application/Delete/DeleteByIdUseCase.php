@@ -6,6 +6,7 @@ use Ebolution\BaseCrudModule\Domain\Contracts\EventEmitterInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\RepositoryInterface;
 use Ebolution\BaseCrudModule\Domain\Contracts\UseCases\DeleteInterface;
 use Ebolution\BaseCrudModule\Domain\Exceptions\EntityException;
+use Ebolution\BaseCrudModule\Domain\Exceptions\EntityNotFoundException;
 use Ebolution\BaseCrudModule\Domain\ValueObjects\Id;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
@@ -32,13 +33,17 @@ class DeleteByIdUseCase implements DeleteInterface
             $this->emitEvents($this->deleting_events, $id);
 
             $response = $this->repository->deleteById(new Id($id));
-            if (! $response) {
-                return (['message' => static::EXCEPTION_MESSAGE, 404]);
-            }
 
-            $this->emitEvents($this->deleted_events, $id);
-        } catch(Exception $e) {
-            return [static::EXCEPTION_MESSAGE, 500];
+            if ($response) {
+                $this->emitEvents($this->deleted_events, $id);
+            }
+        } catch (Exception $e) {
+            //TODO: Log real exception
+            throw new EntityException(static::EXCEPTION_MESSAGE, 500);
+        }
+
+        if (!$response) {
+            throw new EntityNotFoundException(static::EXCEPTION_MESSAGE, 404);
         }
 
         return [
