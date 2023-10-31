@@ -10,6 +10,8 @@ use Ebolution\BaseCrudModule\Domain\Exceptions\EntityException;
 use Ebolution\BaseCrudModule\Domain\Exceptions\EntityNotFoundException;
 use Ebolution\BaseCrudModule\Domain\SaveRequest;
 use Ebolution\BaseCrudModule\Domain\ValueObjects\Id;
+use Ebolution\Logger\Domain\LoggerFactoryInterface;
+use Ebolution\Logger\Infrastructure\Logger;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -17,14 +19,18 @@ class UpdateByIdUseCase implements UpdateInterface
 {
     const EXCEPTION_MESSAGE = 'Entity not updated';
 
+    protected Logger $logger;
     protected array $updating_events = [];
     protected array $updated_events = [];
 
     public function __construct(
         private readonly RequestDataProcessorInterface $requestDataProcessor,
         private readonly RepositoryInterface $repository,
-        private readonly EventEmitterInterface $eventEmitter
-    ) {}
+        private readonly EventEmitterInterface $eventEmitter,
+        private readonly LoggerFactoryInterface $loggerFactory
+    ) {
+        $this->logger = $this->loggerFactory->create();
+    }
 
     /**
      * @throws EntityException
@@ -45,8 +51,15 @@ class UpdateByIdUseCase implements UpdateInterface
         } catch (EntityNotFoundException $e) {
             throw new EntityException(static::EXCEPTION_MESSAGE, 404);
         } catch (Exception $e) {
-            //TODO: Log real exception
-            throw new EntityException(static::EXCEPTION_MESSAGE, 500);
+            ($this->logger)("Unexpected error" .
+                " code " . $e->getCode() .
+                " [" . $e->getMessage() . "]" .
+                " catch by " . get_class($this) .
+                " was thrown on file " . $e->getFile() .
+                "(" . $e->getLine() . ")" .
+                "\n[stacktrace]\n" . $e->getTraceAsString()
+                , 'error');
+            throw new EntityException(static::EXCEPTION_MESSAGE, 500, $e);
         }
 
         return [

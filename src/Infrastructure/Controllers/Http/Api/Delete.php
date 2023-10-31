@@ -13,6 +13,8 @@ use Ebolution\BaseCrudModule\Domain\Contracts\ControllerRequestByIdInterface;
 use Ebolution\BaseCrudModule\Infrastructure\Controllers\Http\Controller;
 use Ebolution\BaseCrudModule\Infrastructure\Traits\ErrorFormatter;
 use Ebolution\Core\Domain\Exceptions\CustomException;
+use Ebolution\Logger\Domain\LoggerFactoryInterface;
+use Ebolution\Logger\Infrastructure\Logger;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -21,11 +23,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Delete extends Controller
 {
-    use ErrorFormatter;
-
     public function __construct(
-        private readonly ControllerRequestByIdInterface $controller
-    ) {}
+        private readonly ControllerRequestByIdInterface $controller,
+        private readonly LoggerFactoryInterface $loggerFactory
+    ) {
+        parent::__construct($this->loggerFactory);
+    }
 
     public function __invoke(Request $request, $id): Response|Application|ResponseFactory
     {
@@ -35,9 +38,7 @@ class Delete extends Controller
                 response('', 204) :
                 response($this->formatError(400, 'Unexpected result'), 400);
         } catch(\Exception $e) {
-            $status_code = $e instanceof HttpException ? $e->getStatusCode() :
-                ($e instanceof CustomException ? $e->getCode() : 400);
-            return response($this->formatError($status_code, $e->getMessage()), $status_code);
+            return $this->handleException($e);
         }
     }
 }
